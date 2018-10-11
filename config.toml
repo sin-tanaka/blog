@@ -1,3 +1,25 @@
 baseURL = "http://blog-sin-tanaka.netlify.com/"
 languageCode = "ja"
 title = "sin-tanaka.com"
+
+# googleAnalytics = "UA-XXXXXXXX-XX" # Optional
+disqusShortname = "tanasinn"
+
+[params]
+  description = "Lifelog"
+  dateformat = "Jan 2, 2006" # Optional
+  # Fonts settings.
+  googlefonts = "https://fonts.googleapis.com/css?family=Lobster|Lato:400,700" # Optional, Include google fonts.
+  fontfamily = "Lato,YuGothic,'Hiragino Kaku Gothic Pro',Meiryo,sans-serif" # Optional, Override body font family.
+  logofontfamily = "Lobster, cursive" # Optional, Override logo font.
+
+[params.author]
+  thumbnail = "images/author.jpg"
+  name = "sin-tanaka"
+  description = "<p>長野市の会社員です。主に技術のことを書きます。</p><p>I work in Nagano, write about tech, programing and my product.</p>"
+  facebook = "https://www.facebook.com/the.sin.tanaka"
+  twitter = "https://twitter.com/_sin_tanaka"
+  github = "https://github.com/sin-tanaka"
+
+[outputs]
+page = [ "HTML", "AMP" ] # if you want AMP enable.
