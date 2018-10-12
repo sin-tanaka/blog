@@ -2,6 +2,7 @@
 title: "Hugo + Netlify でBlog作成"
 date: 2018-10-12T12:28:52+09:00
 draft: true
+thumbnail: "/images/netlify.png"
 toc: true
 ---
 
