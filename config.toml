@@ -16,7 +16,7 @@ disqusShortname = "tanasinn"
 [params.author]
   thumbnail = "images/author.jpg"
   name = "sin-tanaka"
-  description = "<p>長野市の会社員です。主に技術のことを書きます。</p><p>I work in Nagano, write about tech, programing and my product.</p>"
+  description = "<p>長野市の会社員です。主に技術のことを書きます。<a href='https://blog.sin-tanaka.com/about/'>このブログについて</a></p><p>I work in Nagano, write about tech, programing and my product.</p>"
   facebook = "https://www.facebook.com/the.sin.tanaka"
   twitter = "https://twitter.com/_sin_tanaka"
   github = "https://github.com/sin-tanaka"
