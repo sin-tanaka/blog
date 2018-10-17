@@ -1,4 +1,4 @@
-baseURL = "http://blog-sin-tanaka.netlify.com/"
+baseURL = "http://blog.sin-tanaka.com/"
 languageCode = "ja"
 title = "sin-tanaka.com"
 
@@ -6,7 +6,7 @@ title = "sin-tanaka.com"
 disqusShortname = "tanasinn"
 
 [params]
-  description = "Lifelog"
+  description = ""
   dateformat = "Jan 2, 2006" # Optional
   # Fonts settings.
   googlefonts = "https://fonts.googleapis.com/css?family=Lobster|Lato:400,700" # Optional, Include google fonts.
