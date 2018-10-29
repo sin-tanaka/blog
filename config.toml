@@ -2,7 +2,7 @@ baseURL = "http://blog.sin-tanaka.com/"
 languageCode = "ja"
 title = "sin-tanaka.com"
 
-# googleAnalytics = "UA-XXXXXXXX-XX" # Optional
+googleAnalytics = "UA-52059413-2" # Optional
 disqusShortname = "tanasinn"
 
 [params]
