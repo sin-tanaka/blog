@@ -1,8 +1,10 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: sin-tanaka/blog
   branch: master # Branch to update (optional; defaults to master)
 
 publish_mode: editorial_workflow
+
 media_folder: "static/images/uploads"
 public_folder: "/images/uploads"
 
