@@ -16,7 +16,7 @@ categories:
 $ aws --profile [your_profile] ec2 describe-security-groups --group-id [sg-your_groupid] --output table
 ```
 
-`--output` は `json` と `table` が指定可能です。 `json` を指定した場合、フォーマット済の `json` が出力されるので、 `jq` 等を使ったフォーマットは不要です。
+`--output` は `json` と `table` が指定可能です。 なお、`json` を指定した場合、フォーマット済の `json` が出力されるので、 `jq` 等のフォーマッタが不要です。
 
 ```bash
 $ aws --profile [your_profile] ec2 describe-security-groups --group-id [sg-your_groupid] --output json
