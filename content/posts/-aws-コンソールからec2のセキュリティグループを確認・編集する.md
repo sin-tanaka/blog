@@ -1,5 +1,5 @@
 ---
-title: '[AWS]コンソールからEC2のセキュリティグループを確認・編集する'
+title: コンソールからEC2のセキュリティグループを編集する
 description: コンソールからEC2のセキュリティグループを確認・編集する
 date: 2018-12-10T04:00:13.926Z
 thumbnail: /images/uploads/013elly18420_tp_v4.jpg
