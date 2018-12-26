@@ -10,10 +10,10 @@ html {
 }
 
 body {
-  color: #333;
-  font-family: Avenir,Lucida Grande,Helvetica Neue,游ゴシック,YuGothic,Hiragino Kaku Gothic ProN,メイリオ,meiryo,sans-serif
+  color: #555;
+  font-family: Avenir, "Helvetica Neue", Helvetica, Arial, Verdana, Roboto, "游ゴシック", "Yu Gothic", "游ゴシック体", "YuGothic", "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif
   font-feature-settings : "palt";
-  font-size: inherit;
+  font-size: 16px;
   line-height: 1.5rem;
   margin: 0;
   padding: 0;
@@ -323,8 +323,8 @@ article.sn > .article-body li:last-child {
   padding-bottom: 0;
 }
 article.sn > .article-body p {
-  margin: 1rem 0;
-  line-height: 1.5rem;
+  margin: 1.2rem 0;
+  line-height: 2;
 }
 
 article.sn > .article-body strong,
@@ -346,6 +346,15 @@ article.sn > .article-body pre {
   font-family: Menlo, Consolas, monospace;
   font-size: .7rem;
 }
+
+article.sn > .article-body li code {
+  background-color: #eceff1;
+  border-radius: 4px;
+  margin: 0 .25rem;
+  padding: .375rem;
+  white-space: nowrap;
+}
+
 
 article.sn > .article-body pre {
   background-color: #333;
