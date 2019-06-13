@@ -1,9 +1,13 @@
 ---
-title: "一日のcommitを振り替える - git today"
-date: 2018-10-26T19:21:57+09:00
-draft: true
-thumbnail: "/images/git_logo.png"
-toc: true
+title: 一日のcommitを振り替える - git today
+description: |-
+
+  独自にgit.config.aliasに定義している `git today` というコマンドを紹介します。
+date: 2018-10-26T10:21:57.000Z
+thumbnail: /images/git_logo.png
+categories:
+  - git
+  - 開発効率
 ---
 
 独自にgit.config.aliasに定義している `git today` というコマンドを紹介します。
