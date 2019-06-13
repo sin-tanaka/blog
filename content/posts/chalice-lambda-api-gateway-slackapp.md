@@ -3,6 +3,9 @@ title: ' Chalice(Lambda + API Gateway)を使ってInteractiveComponentを扱うS
 description: ' Chalice(Lambda + API Gateway)を使ってInteractiveComponentを扱うSlackAppを作る'
 date: 2019-05-23T08:39:57.020Z
 thumbnail: /images/uploads/images.png
+categories:
+  - slack
+  - chalice
 ---
 ## SlackのInteractiveComponent
 
