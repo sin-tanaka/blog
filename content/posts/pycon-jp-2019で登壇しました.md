@@ -1,5 +1,5 @@
 ---
-title: 'PyCon JP 2019で登壇 & 参加してきました #pyconjp'
+title: 'PyCon JP 2019で登壇 & 参加しました #pyconjp'
 description: 昨年に続き今年もCfPが採択され登壇してきました
 date: 2019-09-25T03:00:09.290Z
 thumbnail: /images/uploads/8cfb736d-74c0-4c11-bcd2-f40efab44537_new.jpg
