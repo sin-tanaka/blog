@@ -1,8 +1,8 @@
 ---
-title: "Pythonの仮想環境構築についてまとめ【社内向け】"
+title: Pythonの仮想環境構築についてまとめ【社内向け】
 description: 2019-11-11時点で知ってることについてまとめておこうと思います。有識者によるツッコミ歓迎です。
-date: 2019-11-11T09:38:09+09:00
-draft: true
+date: 2019-11-11T00:38:09.000Z
+thumbnail: /images/uploads/download.png
 categories:
   - python
   - virtualenv
@@ -13,7 +13,7 @@ categories:
 
 2019-11-11時点で知ってることについてまとめておこうと思います。
 
-# 大前提
+# 前提
 
 - 状況に応じて使い分けましょう
   - 2/3系の最新、ぐらいの大きなくくりでも問題ない人
@@ -28,7 +28,7 @@ categories:
 
 さまざまな仮想環境ツールがありますが、基本的には、
 
-- PATHに仮想環境作成時のpythonのsymlinkを追加する
+- PATHに仮想環境作成時のpythonのsymlink or 実体を追加する
 - sys.pathにsite-packagesを追加する
 
 を実現するためのツールなので必要に応じて使い分けましょう。
@@ -382,7 +382,7 @@ scriptで実行されるpythonはｍ仮想環境を有効化しているかに�
 
 [Pipenvの進んだ使い方 — pipenv 2018\.11\.27\.dev0 ドキュメント | .env の自動読み込み](https://pipenv-ja.readthedocs.io/ja/translate-ja/advanced.html#automatic-loading-of-env)
 
-## Poetry
+# Poetry
 
 コマンド見る感じ使用感はpipenvっぽい？要調査
 
