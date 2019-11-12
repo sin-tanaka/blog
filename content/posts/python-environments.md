@@ -1,20 +1,28 @@
 ---
-title: "今さらPythonの環境構築について知ってることまとめ【社内向け】"
+title: "Pythonの仮想環境構築についてまとめ【社内向け】"
+description: 2019-11-11時点で知ってることについてまとめておこうと思います。有識者によるツッコミ歓迎です。
 date: 2019-11-11T09:38:09+09:00
 draft: true
+categories:
+  - python
+  - virtualenv
+  - pyenv
+  - venv
+  - pipenv
 ---
 
-2019-11-11時点で自分が知ってることについてまとめておこうと思います。
+2019-11-11時点で知ってることについてまとめておこうと思います。
 
-## はじめに
+# 大前提
 
-大前提として状況に応じて使い分けましょう。
-
-データ解析分野では、「とりあえずconda」という風潮もあるかもしれません。Python2 / 3系ぐらい大きなくくりで問題ない人もいれば、少なくとも3.6以上という人や2.6を使わなければいけないという状況もあります。
-
-熟練者は今更とやかくいいません。多分なんでも使いこなした上です。
-
-声高に反論してはいけませんし、お前を信じる仮想環境を信じましょう。
+- 状況に応じて使い分けましょう
+  - 2/3系の最新、ぐらいの大きなくくりでも問題ない人
+  - 2.6環境を用意しなければいけないとき😔
+  - Win環境でデータ解析した人で仮想環境とか考えなくてもいいのであれば全部入りのanacondaでもいいかもしれない
+    - 標準でPythonが入っているLinux環境(Mac含む)では推奨しない
+    - (仮想環境を使いこなせばanacondaのような環境作るは簡単)
+- 良質な仮想環境構築記事を見分けられるようになりましょう
+- お前を信じる仮想環境を信じましょう
 
 # 最初にまとめ
 
@@ -25,24 +33,42 @@ draft: true
 
 を実現するためのツールなので必要に応じて使い分けましょう。
 
-## venv
+その他にも、
 
-venvでの仮想環境構築を通しておおまかな仮想環境の動きを追ってみます。
+- pythonのバージョン管理も内包
+- (pip以外の)pythonのパッケージ管理も内包
+
+があるので必要に応じて使い分けましょう。
+
+筆者は以下を必要に応じて使い分けてるので、いずれにせよ `pyenv` はあると楽かも
+
+- pyenv + venv
+- pyenv-virtualenv
+- pyenv + pipenv
+
+# venv
+
+公式の提供するモジュールです。3.3からデフォルトで使えます。
 
 [venv \-\-\- 仮想環境の作成 — Python 3\.8\.0 ドキュメント](https://docs.python.org/ja/3/library/venv.html)
 
 ※ 2.7等には入ってません
 
-公式の提供するモジュールです。3.3からデフォルトで使えます。
+venvでの仮想環境構築を通しておおまかな仮想環境の動きを追ってみます。
 
 ```sh
+$ python -V  # Python 2.7.10
 $ python3 -V  # Python 3.6.8
+$ pwd
+/Users/yourusername/foobar
 
-# python -m venv [自由になんでも名前]
-$ python -m venv env
+# python3 -m venv /path/to/new
+$ python3 -m venv ./env
 ```
 
-とすると[env_name]なディレクトリをカレントに作成します。これが仮想環境の実体です。
+とすると仮想環境ディレクトリを作成します。
+
+---
 
 中身を見てみます。
 
@@ -66,16 +92,15 @@ $ tree -L 4
     │   └── python3.6
     │       └── site-packages
     └── pyvenv.cfg
-
-5 directories, 11 files
 ```
 
-bin以下にpythonの実体のパスに向いたsymbolic link、起動a
-やpipがあるのがわかると思います。
+`./env/bin` 以下にpythonの実体に向いた `symlink`、や `pip` 、 `activate` 等があるのがわかります。
+
+---
 
 仮想環境を有効化してみます。
 
-起動コマンドですが、OSはもちろん、shellごとにも異なったりするので(たとえば.fishとか.cshがあるのが見えると思います)、公式Doc参照のこと。
+起動コマンドですが、OSはもちろん、shellごとにも異なったりするので(たとえば `.fish` とか `.csh` があるのが見えると思います)、公式Doc参照のこと。
 
 ```sh
 $ source ./env/bin/activate
@@ -87,22 +112,21 @@ $ source ./env/bin/activate
 env > $ python -V  # Python 3.6.8
 ```
 
-さきほどまで `python3` としていたコマンドが `python` だけでよくなっています。
+`python` のバージョンが3.6.8になっています。
 
-これは仮想環境有効化の前後のPATHをみることで理解できます
-
+これは仮想環境有効化の前後のPATHをみることで理解できます。
 
 ```sh 
 env > $ echo $PATH
-/Users/yourusername/foobar_proj/env/bin:/usr/local/Cellar/zplug/2.4.2/bin:・・・
+/Users/yourusername/foobar/env/bin:/usr/local/Cellar/zplug/2.4.2/bin:・・・
 
 env > $ deactivate
 /usr/local/Cellar/zplug/2.4.2/bin:・・・
 ```
 
-仮想環境を有効化することで[env_name]以下のbinがPATHに追加されていますね。これが「仮想環境を有効化する」と表現していることの実体です。
+仮想環境を有効化することで./env/binがPATHに追加されています。
 
-外部のパッケージについて見てみます。
+さらに外部のパッケージについて見てみます。
 
 ```sh
 $ pip install requests
@@ -147,87 +171,131 @@ $ python
 
 こちらも仮想環境下の `site-packages` が追加されていることがわかります。
 
-以上の通り、venvはとてもシンプルな動きですし、プロジェクトのディレクトリ内に仮想環境を持てるというのは意味的にスッキリしています。
+---
 
-例えば、後述するpyenv-virtualenv等は単一の名前空間に仮想環境を作っていくので、プロジェクトとの関連は名前ぐらいです。
+以上が `「仮想環境を有効化する」` と表現していることの実体です。
 
-また、venvで作成した仮想環境ディレクトリはgit管理に含めないようにしましょう。絶対パスのsymlinkが含まれることからもそれらが他人の環境で動かないことがわかるかと思います。
+`venv` はとてもシンプルな動きですし、プロジェクトのディレクトリ内に仮想環境を持てるというのは意味的にスッキリしています。
 
+例えば、後述する `pyenv-virtualenv` 等は単一の名前空間に仮想環境を作るようなイメージなので、プロジェクトとの関連が薄いです。
 
-## virtualenv
+注意点として、venvで作成した仮想環境ディレクトリはgit管理に含めないようにしましょう。絶対パスのsymlinkが含まれることからもそれらが他人の環境で動かないことがわかるかと思います。
+
+# virtualenv
 
 [pypa/virtualenv: Virtual Python Environment builder](https://github.com/pypa/virtualenv)
 
-こちらは標準モジュールではないのでpipでインストールします
+こちらもとてもシンプルです。
 
-生成物見るとlib以下がsite-packages以外のファイルのsimlinkも持ってたり、pythonの実行ファイルもsimlinkじゃなかったりするようですが、使い方はほとんどvenvと同じです
+venvと生成物比較するとlib以下がsite-packages以外のファイルのsimlinkも持ってたり、pythonの実行ファイルもsimlinkでなく実体なので容量食ったりですが、使い方はほとんどvenvと同じです
 
 ```sh
 $ pip install virtualenv
-# virtualenv [your_env_name]
-$ virtualenv test_env
-$ source test_env/bin/activate
+# virtualenv /path/to/new
+$ virtualenv ./env
+$ source ./env/bin/activate
 ```
 
-## pyenv-virtualenv
+# pyenv-virtualenv
 
-pyenvは仮想環境ではなく、複数バージョンのpythonを入れたい場合の管理ツールです。
+`pyenv` は複数バージョンのpythonを入れたい場合のパッケージマネジャー的なツールです。
 
-pyenvは `.python-version` を見てpythonのバージョンを変えます。
+様々なversionのPythonを始め、Java実装であるJythonはもちろんanacondaまでもinstall可能です。
 
-更にpyenv自体がpythonインストールマネージャ的でもあるので、様々なversionのPythonを始め、Java実装であるJythonはもちろんanacondaまでもinstall可能です。
+`.python-version` というファイルを見てpythonのバージョンを変えます。
 
 ```sh
 $ pyenv local system
 $ python -V
 Python 2.7.10 
+
 $ cat .python-version
 system
 
 # 3.6.8をpyenvからinstallしたい場合
-$ pyenv install 3.6.8
+$ pyenv install 3.7.0
+
 # anyenv経由でpyenv使ってるのでちょっとパスが特殊ですが利用イメージ
 $ pyenv versions
-  system
-* 3.6.8 (set by /Users/yourusername/.anyenv/envs/pyenv/version)
-  3.6.8/envs/sample_foxdot
-  sample_foxdot
-$ pyenv global 3.6.8
+* system
+  3.7.0 (set by /Users/yourusername/.anyenv/envs/pyenv/version)
+
+$ pyenv global 3.7.0
 $ python -V
-Python 3.6.8
+Python 3.7.0
+
+$ pyenv versions
+  system
+* 3.7.0 (set by /Users/yourusername/.anyenv/envs/pyenv/version)
 ```
 
-pyenv-virtualenvはpyenvとvirtualenvを使ったwrapperです
+`pyenv-virtualenv` は `pyenv` と `virtualenv` を使ったwrapperです
 
-pyenvに乗っかりつつvirtualenvできる感じ
+`pyenv` に乗っかりつつ `virtualenv` できる感じです
 
 ```sh
-$ pyenv virtualenvp 3.6.8 test_env
-$ pyenv activate test_env
-# PJディレクトリでこれでもOK
-$ pyenv local test_env
+# インストールしたバージョンから仮想環境を作る
+$ pyenv virtualenv 3.7.0 3.7.0-env
+
+$ pyenv versions
+  system
+  3.7.0 (set by /Users/yourusername/.anyenv/envs/pyenv/version)
+  3.7.0/envs/3.7.0-env
+* 3.7.0-env
+
+# 有効化する
+$ pyenv activate 3.7.0-env
+
+# プロジェクトディレクトリでこれでもOK
+$ pyenv local 3.7.0-env
 ```
 
 やはり `.python-version` はgitに含めないようにしましょう
 
-特筆すべきは
-- venvやvirtualenvと違い、仮想環境ディレクトリの作成先が `pyenv/versions/[your_env] `配下
+`venv` や `virtualenv` との違いは、
+
+- 仮想環境ディレクトリの作成先が `$HOME/.pyenv/versions/[your_env] `配下
 - 環境毎に名前をつける必要がある
 
 の2点です。
 
-例えばPyCharmでpythonの実行ファイルを指定する必要があるときはpyenv配下を漁りましょう。
+例えばPyCharmでインタプリタのパスを指定するとき、 `virtualenv` 、 `venv` は勝手に読んでくれたりしますが、 `pyenv-virtualenv` の場合 `.pyenv` 配下を漁る必要があり少し面倒です。
 
-また、ディレクトリの場所に依存しないので汎用的な環境を作っておくと使いまわせたりします。
+また、仮想環境ディレクトリはディレクトリの場所に依存しないので汎用的な環境を作っておくと使いまわせたりします。
 
-## pipenv
+# pipenv
 
-pipenvはさらにpipをwrapし、npmのようなパッケージ管理の機能を追加したツールです
+`pipenv` は `pip` をwrapし、 `npm` のようなパッケージ管理の機能 + `virtualenv` or `venv` を一元管理するツールです。
 
-pyenvを入れていれば
+[Pipenv: 人間のためのPython開発ワークフロー — pipenv 2018\.11\.27\.dev0 ドキュメント](https://pipenv-ja.readthedocs.io/ja/translate-ja/)
+
+公式も推奨しています。
+
+PyCon 2018の作者の講演が参考になります
+
+[Kenneth Reitz \- Pipenv: The Future of Python Dependency Management \- PyCon 2018 \- YouTube](https://www.youtube.com/watch?v=GBQAKldqgZs)
+
+氏が問題点として上げているのが、
+
+- requirements.txtによるパッケージ管理はlockfileの機構がない
+- 依存関係が1ファイルにすべて保存されているため、本当に必要とされているパッケージがわからない
+
+という点です。
+
+例えば、 `pip install flask` としたとき、真にプロジェクトに必要なパッケージは `flask` のみであるはずが、`flask` の依存パッケージである `click` や `jinja2` までもを `requirements.txt` で管理する必要があります。
+
+これを `pipenv` では必要なパッケージは `Pipfile` というファイルに、その依存関係を `Pipfile.lock` と分けることでこれを解決しています。
+
+また、開発でのみ必要なパッケージ -例えば `pytest` など- の管理も可能です。
+
+`virtualenv` によって解決したい領域とは違うため、「仮想環境構築ツールとして語るのはどうなの？」と思うかもしれませんが、 `pipenv` はとにかく多機能で、仮想環境作成の機能や、npmライクなscript管理も可能です(仮想環境構築、という点でいうとオーバースペックかも)
+
+仮想環境の構築には `virtualenv` or `venv` を使うため、それらの動きをすでに理解している方や、 `requirements.txt` によるパッケージ管理に問題を抱えている方には有用かと思います。
 
 ```sh
+# 仮想環境を作成
 # 色んなバージョン指定の方法
+# このときpyenvが入っていると、指定したバージョンが未インストールでもインストール可能
 $ pipenv --three
 $ pipenv --python 3.6
 $ pipenv --python 3.6.8
@@ -236,25 +304,19 @@ $ pipenv --python 3.6.8
 $ pipenv shell
 ```
 
-仮想環境の位置ですが、 `PIPENV_VENV_IN_PROJECT`　の環境変数をtrueにしておくとカレントの.venv配下に作られます。defaultだとホームディレクトリの.virtualenv配下に作られます。
-好みに応じて使い分けると良いと思います。
+仮想環境の位置ですが、デフォルトではホームディレクトリの.local配下に作られます。`PIPENV_VENV_IN_PROJECT`　の環境変数をtrueにしておくとカレントディレクトリのの.venv配下に作られます。
 
-pipenvの利点と、他と大きく違うところはnpmライクなパッケージマネージャの機能があることです。
+参考: [Pipenvと仮想環境 — pipenv 2018\.11\.27\.dev0 ドキュメント](https://pipenv-ja.readthedocs.io/ja/translate-ja/install.html#virtualenv-mapping-caveat)
 
-従来のpipによるパッケージ管理は `pip freeze` の結果を `requirements.txt` というファイルに書き込むという慣例で成り立っていました。
+--- 
 
-よって、複数人で開発している場合、pip install したファイルをrequirements.txtに追加し忘れるという問題が起こりえましたが、pipenvはこれを解決しています。
-
-例えばパッケージはpipではなくpipenv経由でinstallします。
+パッケージのinstallはpipenv経由で行います。このとき自動的にPipfile / Pipfile.lockへ書き込まれます。
 
 ```sh
-$ pipenv install requests
+$ pipenv install flask
 ```
 
-installしたパッケージは自動的にPipfileというファイルに書き込まれます。
-
-```sh
-$ cat Pipfile
+```toml
 [[source]]
 name = "pypi"
 url = "https://pypi.org/simple"
@@ -263,49 +325,68 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-requests = "*"
+flask = "*"
 
 [requires]
 python_version = "3.6" 
 ```
 
-また、pip freezeではinstallしたパッケージの依存関係にあるパッケージまで出力するため、本当に必要として入れたパッケージが何なのか？わからなくなりがちです。
-
-pipenvなら依存ファイルはPipfile.lockというファイルに書き込まれます(大きいため内容は載せません)。もちろんこれらも自動です。
-
-更に開発環境でのみ必要なパッケージなどもrequirements.dev.txtのような独自管理だったと思いますがこれでも解決しています。
+開発用のパッケージも同様です `--dev or -d` をつけるだけです
 
 ```sh
-$ pipenv install --dev [pkg_name]
-$ cat Pipfile
+$ pipenv install --dev pytest 
+```
+
+```toml
 [[source]]
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-[pkg_name]
+pytes = "*"
 
 [packages]
-requests = "*"
+flask = "*"
 
 [requires]
 python_version = "3.6" 
 ```
 
-便利！
+Pipfile / Piplock.fileはgit管理に含めましょう。Pipfileがあるディレクトリで `pipenv install` とすると、Pipfileに沿ったバージョンの仮想環境とパッケージのインストールが可能です。ここもnpmライクですね。
 
-### script
+## script管理
 
-TODO
+[Pipenvの進んだ使い方 — pipenv 2018\.11\.27\.dev0 ドキュメント | 独自のスクリプトショートカット](https://pipenv-ja.readthedocs.io/ja/translate-ja/advanced.html#custom-script-shortcuts)
+
+開発をしているとサーバの起動コマンドが複数必要なケースがあると思います。
+
+例えばDjangoでrunserverするときに参照するsettings.pyを変えたいときなどが考えられますが、コマンドが長くなりがちですし、READMEで管理するのも面倒かと思います。
+
+こういったスクリプトをPipenvのscriptsに登録することで、コマンドの抽象化ができ、プロジェクトで必要なコマンドが一覧で分かります。
+
+```sh
+# pipenv run [script_name]
+$ pipenv run start
+```
+
+```toml
+[scripts]
+start = "python manage.py runserver --settings config.setting.dev"
+format = "black ."
+```
+
+scriptで実行されるpythonはｍ仮想環境を有効化しているかに関わらず、仮想環境下で実行されます。
+
+また `.env` というファイルをプロジェクトに作成すると `pipenv run` `pipenv shell` 時に自動で読み込みます。
+
+[Pipenvの進んだ使い方 — pipenv 2018\.11\.27\.dev0 ドキュメント | .env の自動読み込み](https://pipenv-ja.readthedocs.io/ja/translate-ja/advanced.html#automatic-loading-of-env)
 
 ## Poetry
 
 コマンド見る感じ使用感はpipenvっぽい？要調査
 
 [sdispater/poetry: Python dependency management and packaging made easy\.](https://github.com/sdispater/poetry)
-
-
 
 # まとめ
 
@@ -322,4 +403,3 @@ TODO
 - (pip以外の)pythonのパッケージ管理も内包
 
 があるので必要に応じて使い分けましょう。
-
