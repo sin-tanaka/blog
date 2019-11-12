@@ -13,7 +13,7 @@ categories:
 
 2019-11-11時点で知ってることについてまとめておこうと思います。
 
-# 前提
+## 前提
 
 - 状況に応じて使い分けましょう
   - 2/3系の最新、ぐらいの大きなくくりでも問題ない人
@@ -24,7 +24,7 @@ categories:
 - 良質な仮想環境構築記事を見分けられるようになりましょう
 - お前を信じる仮想環境を信じましょう
 
-# 最初にまとめ
+## 最初にまとめ
 
 さまざまな仮想環境ツールがありますが、基本的には、
 
@@ -46,7 +46,7 @@ categories:
 - pyenv-virtualenv
 - pyenv + pipenv
 
-# venv
+## venv
 
 公式の提供するモジュールです。3.3からデフォルトで使えます。
 
@@ -54,7 +54,9 @@ categories:
 
 ※ 2.7等には入ってません
 
-venvでの仮想環境構築を通しておおまかな仮想環境の動きを追ってみます。
+## `仮想環境を有効化する` とは
+
+venvでの仮想環境構築を通しておおまかな仮想環境有効化の動きを追ってみます。
 
 ```sh
 $ python -V  # Python 2.7.10
@@ -66,11 +68,9 @@ $ pwd
 $ python3 -m venv ./env
 ```
 
-とすると仮想環境ディレクトリを作成します。
+とすると `/path/to/new` なディレクトが作られます(ここでは `env` )。これが仮想環境のディレクトリになります。
 
----
-
-中身を見てみます。
+treeコマンドで中身を見てみます。
 
 ```sh
 $ tree -L 4
@@ -94,13 +94,11 @@ $ tree -L 4
     └── pyvenv.cfg
 ```
 
-`./env/bin` 以下にpythonの実体に向いた `symlink`、や `pip` 、 `activate` 等があるのがわかります。
+`./env/bin` 以下に、venv実行時のpythonの実体に向いた `symlink`、や `pip` 、 `activate` 等があるのがわかります。
 
----
+次に `./env/bin` にある `activate` を実行し、仮想環境を有効化してみます。
 
-仮想環境を有効化してみます。
-
-起動コマンドですが、OSはもちろん、shellごとにも異なったりするので(たとえば `.fish` とか `.csh` があるのが見えると思います)、公式Doc参照のこと。
+`activate` ですが、OSはもちろん、shellごとにも異なったりするので(たとえば `.fish` とか `.csh` があるのが見えると思います)、公式ドキュメント参照のこと。
 
 ```sh
 $ source ./env/bin/activate
@@ -112,9 +110,9 @@ $ source ./env/bin/activate
 env > $ python -V  # Python 3.6.8
 ```
 
-`python` のバージョンが3.6.8になっています。
+まず、 `python` コマンド実行時のバージョンが `python3` 実行時のバージョンである `3.6.8` になっています。
 
-これは仮想環境有効化の前後のPATHをみることで理解できます。
+仮想環境有効化の前後のPATHをみてみます。
 
 ```sh 
 env > $ echo $PATH
@@ -126,7 +124,11 @@ env > $ deactivate
 
 仮想環境を有効化することで./env/binがPATHに追加されています。
 
-さらに外部のパッケージについて見てみます。
+これによって `python` 実行で参照しているバージョンが3.6.8になっているということがわかります。
+
+---
+
+さらに外部のパッケージの参照パスについて見てみます。
 
 ```sh
 $ pip install requests
@@ -141,11 +143,9 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'requests'
 ```
 
-基本的に、仮想環境を作成した元のpythonで入れたパッケージは参照することができません。
+基本的に、仮想環境下では、元のpythonで入れたパッケージは参照することができません。
 
 よって、仮想環境内のpipを通してパッケージをインストールすることで仮想環境内でパッケージをimportできるようになります。
-
-※「基本的に」と書いたのは、元のsite-packagesを参照するオプションがあるからです。
 
 ```sh
 $ source env/bin/activate
@@ -154,7 +154,7 @@ env > $ python
 >>> import requests
 ```
 
-こちらも仮想環境の有効化前後でimport pathの参照先を見てみます
+こちらも仮想環境の有効化前後で `sys.path` を比較してみます
 
 ```sh
 env > $ python 
@@ -175,17 +175,17 @@ $ python
 
 以上が `「仮想環境を有効化する」` と表現していることの実体です。
 
-`venv` はとてもシンプルな動きですし、プロジェクトのディレクトリ内に仮想環境を持てるというのは意味的にスッキリしています。
+`venv` はシンプルな動きですし、プロジェクトのディレクトリ内に仮想環境を持てるというのは意味的にスッキリしています。基本的な仮想環境の動きを理解するのに最適かもしれません。
 
 例えば、後述する `pyenv-virtualenv` 等は単一の名前空間に仮想環境を作るようなイメージなので、プロジェクトとの関連が薄いです。
 
 注意点として、venvで作成した仮想環境ディレクトリはgit管理に含めないようにしましょう。絶対パスのsymlinkが含まれることからもそれらが他人の環境で動かないことがわかるかと思います。
 
-# virtualenv
+## virtualenv
 
 [pypa/virtualenv: Virtual Python Environment builder](https://github.com/pypa/virtualenv)
 
-こちらもとてもシンプルです。
+こちらもシンプルです。
 
 venvと生成物比較するとlib以下がsite-packages以外のファイルのsimlinkも持ってたり、pythonの実行ファイルもsimlinkでなく実体なので容量食ったりですが、使い方はほとんどvenvと同じです
 
@@ -196,7 +196,7 @@ $ virtualenv ./env
 $ source ./env/bin/activate
 ```
 
-# pyenv-virtualenv
+## pyenv-virtualenv
 
 `pyenv` は複数バージョンのpythonを入れたい場合のパッケージマネジャー的なツールです。
 
@@ -228,6 +228,8 @@ $ pyenv versions
   system
 * 3.7.0 (set by /Users/yourusername/.anyenv/envs/pyenv/version)
 ```
+
+---
 
 `pyenv-virtualenv` は `pyenv` と `virtualenv` を使ったwrapperです
 
@@ -263,7 +265,7 @@ $ pyenv local 3.7.0-env
 
 また、仮想環境ディレクトリはディレクトリの場所に依存しないので汎用的な環境を作っておくと使いまわせたりします。
 
-# pipenv
+## pipenv
 
 `pipenv` は `pip` をwrapし、 `npm` のようなパッケージ管理の機能 + `virtualenv` or `venv` を一元管理するツールです。
 
@@ -355,7 +357,7 @@ python_version = "3.6"
 
 Pipfile / Piplock.fileはgit管理に含めましょう。Pipfileがあるディレクトリで `pipenv install` とすると、Pipfileに沿ったバージョンの仮想環境とパッケージのインストールが可能です。ここもnpmライクですね。
 
-## script管理
+### script管理
 
 [Pipenvの進んだ使い方 — pipenv 2018\.11\.27\.dev0 ドキュメント | 独自のスクリプトショートカット](https://pipenv-ja.readthedocs.io/ja/translate-ja/advanced.html#custom-script-shortcuts)
 
@@ -382,13 +384,13 @@ scriptで実行されるpythonはｍ仮想環境を有効化しているかに�
 
 [Pipenvの進んだ使い方 — pipenv 2018\.11\.27\.dev0 ドキュメント | .env の自動読み込み](https://pipenv-ja.readthedocs.io/ja/translate-ja/advanced.html#automatic-loading-of-env)
 
-# Poetry
+## Poetry
 
 コマンド見る感じ使用感はpipenvっぽい？要調査
 
 [sdispater/poetry: Python dependency management and packaging made easy\.](https://github.com/sdispater/poetry)
 
-# まとめ
+## まとめ
 
 さまざまな仮想環境ツールがありますが、基本的には、
 
