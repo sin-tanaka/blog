@@ -1,7 +1,7 @@
 ---
 title: 引越しの記録
 description: 引越しの記録
-date: 2020-05-12T10:40:47.688Z
+date: 2020-05-12T09:40:13.878Z
 thumbnail: /images/uploads/013elly18420_tp_v4.jpg
 ---
 自分用の引越ししたメモ
