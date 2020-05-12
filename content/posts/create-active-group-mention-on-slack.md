@@ -1,8 +1,8 @@
 ---
-title: 'Slackで動的なユーザグループを作成しようとして失敗した'
-description: 'Slackで動的なユーザグループを作成しようとして失敗した記録です'
+title: Slackで動的なユーザグループを作成しようとして失敗した
+description: Slackで動的なユーザグループを作成しようとして失敗した記録です
 date: 2019-12-06T01:56:12.789Z
-thumbnail: /images/uploads/lifecycle.png
+thumbnail: /images/uploads/images.png
 categories:
   - Python
 tags:
